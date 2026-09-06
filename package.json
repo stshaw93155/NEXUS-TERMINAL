@@ -1,0 +1,24 @@
+{
+  "name": "nexus-terminal",
+  "private": true,
+  "version": "1.0.0",
+  "description": "NEXUS - AI News Intelligence Terminal",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "@mapbox/vector-tile": "^3.0.0",
+    "cesium": "^1.145.0",
+    "egm96-universal": "^1.1.1",
+    "mgrs": "^2.2.0",
+    "pbf": "^5.1.2",
+    "satellite.js": "^7.1.0",
+    "vite-plugin-cesium": "^1.2.23"
+  }
+}

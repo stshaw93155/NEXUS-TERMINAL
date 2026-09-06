@@ -1,0 +1,282 @@
+/* ==========================================================================
+   NEXUS TERMINAL - Operational Workspace Layout
+   ========================================================================== */
+
+#app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-core);
+  position: relative;
+}
+
+/* Header */
+#header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+  padding: 0 14px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  z-index: 100;
+  user-select: none;
+}
+
+/* Primary Workspace Body */
+#main-workspace {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Left Navigation Rail */
+#nav-panel {
+  width: var(--left-nav-width);
+  height: 100%;
+  background-color: var(--bg-surface);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: width var(--transition-fast);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 40;
+}
+
+#nav-panel.collapsed {
+  width: var(--left-nav-collapsed-width);
+}
+
+/* Center Work Area (Map + Feed) */
+#center-workspace {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Map Panel (Top Half) */
+#map-panel {
+  height: 48%;
+  min-height: 240px;
+  max-height: 55%;
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+  background: radial-gradient(circle at center, #0e131d 0%, #08090e 100%);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Feed Panel (Bottom Half) */
+#feed-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-core);
+  overflow: hidden;
+}
+
+/* Right Rail: Alerts & Trending */
+#alerts-panel {
+  width: var(--right-alerts-width);
+  height: 100%;
+  background-color: var(--bg-surface);
+  border-left: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+  z-index: 40;
+  transition: transform var(--transition-fast), width var(--transition-fast);
+}
+
+/* Bottom Dock */
+#bottom-dock {
+  height: var(--terminal-dock-height);
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-medium);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 50;
+  transition: height var(--transition-fast);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+#bottom-dock.collapsed {
+  height: var(--terminal-dock-collapsed-height);
+}
+
+#bottom-dock.expanded {
+  height: 80vh;
+}
+
+#bottom-dock-tabs {
+  display: flex;
+  background: var(--bg-surface-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0 10px;
+  align-items: center;
+}
+
+.dock-tab-btn {
+  padding: 8px 15px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dock-tab-btn:hover {
+  color: var(--text-main);
+}
+
+.dock-tab-btn.active {
+  color: var(--cyan);
+  border-bottom: 2px solid var(--cyan);
+}
+
+#bottom-dock-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+#terminal-panel, #cctv-matrix-panel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#cctv-matrix-panel {
+  background: #08090e;
+  display: none;
+}
+
+/* Mobile Tab Switcher Bar */
+#mobile-tabs-bar {
+  display: none;
+  height: 48px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  z-index: 120;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+
+/* Laptop: 1024px - 1439px */
+@media (max-width: 1439px) {
+  :root {
+    --left-nav-width: 180px;
+    --right-alerts-width: 250px;
+  }
+}
+
+/* Compact Laptop / Large Tablet: 860px - 1023px */
+@media (max-width: 1023px) {
+  #nav-panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    box-shadow: 10px 0 25px rgba(0, 0, 0, 0.7);
+    transform: translateX(-100%);
+  }
+
+  #nav-panel.mobile-open {
+    transform: translateX(0);
+  }
+
+  #alerts-panel {
+    width: 240px;
+  }
+}
+
+/* Mobile & Tablet Portrait: < 768px */
+@media (max-width: 767px) {
+  #mobile-tabs-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  /* Make all panels stack and fill the available area */
+  #main-workspace {
+    flex-direction: column;
+  }
+
+  #alerts-panel {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 90;
+  }
+
+  #alerts-panel.active-tab {
+    display: flex;
+  }
+
+  #map-panel {
+    height: 100%;
+    display: none;
+  }
+
+  #map-panel.active-tab {
+    display: flex;
+  }
+
+  #feed-panel {
+    height: 100%;
+    display: none;
+  }
+
+  #feed-panel.active-tab {
+    display: flex;
+  }
+
+  #bottom-dock {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 48px; /* Above mobile tabs */
+    top: var(--header-height); /* Fill screen below header */
+    height: auto !important;
+    z-index: 100;
+  }
+
+  #bottom-dock.active-tab {
+    display: flex;
+  }
+
+  /* We don't use terminal-panel directly for tabs on mobile anymore, we show the whole dock */
+  #terminal-panel.active-tab {
+    transform: none;
+  }
+}

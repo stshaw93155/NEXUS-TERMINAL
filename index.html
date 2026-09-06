@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>NEXUS // Global News Intelligence Terminal</title>
+  <meta name="description" content="AI-native real-time news and intelligence terminal. Understand the signal, investigate stories, and interrogate with Gemini Analyst." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+</head>
+<body>
+  <!-- CRT Scanlines Filter Overlay -->
+  <div class="scanlines-overlay" aria-hidden="true"></div>
+
+  <!-- Primary Application Frame -->
+  <div id="app-container">
+    <!-- Master Header -->
+    <header id="header-bar" role="banner"></header>
+
+    <!-- Global Notifications -->
+    <div id="toast-container" style="position: fixed; top: 50px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none;"></div>
+
+    <!-- Operational 3-Column Workspace -->
+    <div id="main-workspace">
+      <!-- Left Navigation Rail -->
+      <nav id="nav-panel" role="navigation" aria-label="Operations Navigation"></nav>
+
+      <!-- Center Area: Map + Clustered Feed -->
+      <main id="center-workspace" role="main">
+        <!-- Top Half: Geospatial Event Map -->
+        <section id="map-panel" aria-label="Geospatial Intelligence Map"></section>
+
+        <!-- Bottom Half: Live Clustered Intelligence Feed -->
+        <section id="feed-panel" aria-label="Live Intelligence Feed"></section>
+      </main>
+
+      <!-- Right Column: Alerts & Trending -->
+      <aside id="alerts-panel" aria-label="Alerts and Threat Dispatch"></aside>
+    </div>
+
+    <!-- Bottom Persistent Dock -->
+    <footer id="bottom-dock" aria-label="Bottom Dock" class="collapsed">
+      <div id="bottom-dock-tabs">
+        <button id="tab-analyst" class="dock-tab-btn active">GEMINI ANALYST</button>
+        <button id="tab-cctv" class="dock-tab-btn">CCTV MATRIX</button>
+        <div style="flex: 1;"></div>
+        <button id="dock-expand-btn" class="panel-btn" title="Expand/Collapse">
+          <span id="dock-expand-icon" class="material-symbols-outlined">expand_less</span>
+        </button>
+      </div>
+      <div id="bottom-dock-content">
+        <!-- Gemini Analyst Terminal -->
+        <div id="terminal-panel" aria-label="Gemini Analyst Terminal"></div>
+        <!-- CCTV Matrix Panel -->
+        <div id="cctv-matrix-panel" aria-label="CCTV Camera Matrix"></div>
+      </div>
+    </footer>
+    <!-- Mobile Screen View Switcher -->
+    <nav id="mobile-tabs-bar" role="tablist" aria-label="Mobile View Switcher">
+      <button class="mobile-tab-btn active" data-tab="feed" style="flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 10px; color: var(--cyan); gap: 2px;">
+        <span class="material-symbols-outlined" style="font-size: 18px;">view_headline</span>
+        <span>FEED</span>
+      </button>
+      <button class="mobile-tab-btn" data-tab="map" style="flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); gap: 2px;">
+        <span class="material-symbols-outlined" style="font-size: 18px;">public</span>
+        <span>MAP</span>
+      </button>
+      <button class="mobile-tab-btn" data-tab="alerts" style="flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); gap: 2px;">
+        <span class="material-symbols-outlined" style="font-size: 18px;">warning</span>
+        <span>ALERTS</span>
+      </button>
+      <button class="mobile-tab-btn" data-tab="terminal" style="flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); gap: 2px;">
+        <span class="material-symbols-outlined" style="font-size: 18px;">terminal</span>
+        <span>ANALYST</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Modals & Overlays -->
+  <div id="investigation-modal-backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Case Investigation Workspace"></div>
+  <div id="command-palette-backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Command Palette"></div>
+  <div id="shortcuts-modal-backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Shortcuts Help"></div>
+
+  <!-- Application Script -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
