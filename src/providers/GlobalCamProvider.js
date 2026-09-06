@@ -18,11 +18,18 @@ export class GlobalCamProvider extends BaseCameraProvider {
     // Wrap the static array in a Promise to simulate an async fetch from a real backend.
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(WORLD_CAMERAS.map(cam => ({
-          ...cam,
-          url: cam.mjpeg,
-          type: 'mjpeg', // We know from earlier scrape that these are all MJPEG feeds
-        })));
+        resolve(WORLD_CAMERAS.map(cam => {
+          let secureUrl = cam.mjpeg;
+          // Proxy HTTP streams if running on an HTTPS host (like GitHub Pages) to prevent Mixed Content blocks
+          if (secureUrl.startsWith('http://') && window.location.protocol === 'https:') {
+             secureUrl = 'https://corsproxy.io/?url=' + encodeURIComponent(secureUrl);
+          }
+          return {
+            ...cam,
+            url: secureUrl,
+            type: 'mjpeg',
+          };
+        }));
       }, 100);
     });
   }

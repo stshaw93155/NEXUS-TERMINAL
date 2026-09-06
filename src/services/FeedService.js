@@ -49,7 +49,9 @@ export class FeedService {
   async updateGdelt() {
     const gdeltUrl = 'https://api.gdeltproject.org/api/v2/doc/doc?query=(terror OR attack OR outbreak OR virus OR crisis OR emergency OR military OR war) sourcelang:eng&mode=artlist&maxrecords=50&format=json&sort=datedesc';
     try {
-      const res = await fetch(gdeltUrl);
+      // Use allorigins to bypass CORS on static hosts like GitHub Pages
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(gdeltUrl)}`;
+      const res = await fetch(proxyUrl);
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       
