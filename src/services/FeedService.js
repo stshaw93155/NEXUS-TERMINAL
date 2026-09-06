@@ -3,9 +3,9 @@ import { store } from '../state/store.js';
 const RSS2JSON_API = 'https://api.rss2json.com/v1/api.json?rss_url=';
 
 const FEEDS = {
-  news: 'https://feeds.bbci.co.uk/news/world/rss.xml',
-  alerts: 'https://www.aljazeera.com/xml/rss/all.xml',
-  finance: 'https://search.cnbc.com/rs/search/combinedcms/view.xml?id=10000664' // CNBC Finance
+  news: '/api/news',
+  alerts: '/api/alerts',
+  finance: '/api/finance' // CNBC Finance
 };
 
 export class FeedService {
@@ -39,19 +39,24 @@ export class FeedService {
   }
 
   async fetchRss(url) {
-    const res = await fetch(`${RSS2JSON_API}${encodeURIComponent(url)}`);
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    const data = await res.json();
-    if (data.status !== 'ok') throw new Error('Failed to parse RSS feed');
-    return data.items;
+    const text = await res.text();
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(text, "text/xml");
+    const items = Array.from(xmlDoc.querySelectorAll("item")).map(item => ({
+      title: item.querySelector("title")?.textContent || '',
+      description: item.querySelector("description")?.textContent || '',
+      pubDate: item.querySelector("pubDate")?.textContent || ''
+    }));
+    return items;
   }
 
   async updateGdelt() {
     const gdeltUrl = 'https://api.gdeltproject.org/api/v2/doc/doc?query=(terror OR attack OR outbreak OR virus OR crisis OR emergency OR military OR war) sourcelang:eng&mode=artlist&maxrecords=50&format=json&sort=datedesc';
     try {
-      // Use allorigins to bypass CORS on static hosts like GitHub Pages
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(gdeltUrl)}`;
-      const res = await fetch(proxyUrl);
+      // Use Vercel rewrite to bypass CORS natively
+      const res = await fetch('/api/gdelt');
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       

@@ -3,6 +3,94 @@
     {
       "source": "/api/opensky",
       "destination": "https://opensky-network.org/api/states/all"
+    },
+    {
+      "source": "/api/gdelt",
+      "destination": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "source": "/api/news",
+      "destination": "https://feeds.bbci.co.uk/news/world/rss.xml"
+    },
+    {
+      "source": "/api/alerts",
+      "destination": "https://www.aljazeera.com/xml/rss/all.xml"
+    },
+    {
+      "source": "/api/finance",
+      "destination": "https://search.cnbc.com/rs/search/combinedcms/view.xml?id=10000664"
+    },
+    {
+      "source": "/api/cam/cctv-jp-1",
+      "destination": "http://114.179.127.11:8002/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-jp-2",
+      "destination": "http://153.156.20.243:80/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-gb-1",
+      "destination": "http://82.71.13.178:8080/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-fr-1",
+      "destination": "http://80.15.183.96:81/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-fr-2",
+      "destination": "http://82.127.249.27:8000/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-fr-3",
+      "destination": "http://80.11.95.43:80/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-ru-1",
+      "destination": "http://78.36.19.87:80/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-br-1",
+      "destination": "http://143.106.161.110:80/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-us-1",
+      "destination": "http://128.146.135.226:80/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-us-2",
+      "destination": "http://216.107.197.101:8086/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-us-3",
+      "destination": "http://204.93.117.45:80/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-us-4",
+      "destination": "http://174.141.163.166:8080/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-us-5",
+      "destination": "http://217.180.234.228:80/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-us-6",
+      "destination": "http://184.177.43.105:80/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-de-1",
+      "destination": "http://37.24.24.185:88/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-de-2",
+      "destination": "http://89.1.82.42:80/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-es-1",
+      "destination": "http://2.136.124.194:82/mjpg/video.mjpg"
+    },
+    {
+      "source": "/api/cam/cctv-es-2",
+      "destination": "http://2.136.124.194:83/mjpg/video.mjpg"
     }
   ]
 }

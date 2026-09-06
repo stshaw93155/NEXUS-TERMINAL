@@ -20,9 +20,9 @@ export class GlobalCamProvider extends BaseCameraProvider {
       setTimeout(() => {
         resolve(WORLD_CAMERAS.map(cam => {
           let secureUrl = cam.mjpeg;
-          // Proxy HTTP streams if running on an HTTPS host (like GitHub Pages) to prevent Mixed Content blocks
+          // Proxy HTTP streams via Vercel Edge Rewrites if running on an HTTPS host to prevent Mixed Content blocks
           if (secureUrl.startsWith('http://') && window.location.protocol === 'https:') {
-             secureUrl = 'https://corsproxy.io/?url=' + encodeURIComponent(secureUrl);
+             secureUrl = `/api/cam/${cam.id}`;
           }
           return {
             ...cam,
