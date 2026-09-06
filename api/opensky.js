@@ -1,28 +1,25 @@
 /**
- * Vercel Serverless Function: /api/opensky
- * Server-side proxy for the OpenSky Network API to bypass CORS restrictions
- * on the browser. Vite's dev proxy handles local development; this function
- * handles Vercel production deployments.
+ * Vercel Edge Function: /api/opensky
+ * Server-side proxy for the OpenSky Network API to bypass CORS restrictions.
+ * Uses Edge Runtime (V8) which is always ESM-compatible and has no cold-start.
+ * Vite's dev proxy handles local development; this Edge function handles Vercel.
  */
-export default async function handler(req, res) {
-  // Allow all origins (our own Vercel domain makes the request)
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+export const config = {
+  runtime: 'edge',
+};
 
-  const { lat, lon } = req.query;
+export default async function handler(req) {
+  const url = new URL(req.url);
+  const lat = url.searchParams.get('lat');
+  const lon = url.searchParams.get('lon');
 
-  // Build the upstream OpenSky URL, optionally center-bounded
+  // Build the upstream OpenSky URL, optionally with a bounding box
   let upstreamUrl = 'https://opensky-network.org/api/states/all';
   if (lat && lon) {
     const latN = parseFloat(lat);
     const lonN = parseFloat(lon);
     if (Number.isFinite(latN) && Number.isFinite(lonN)) {
-      // Bounding box ~30 degrees around the camera center
       const box = 15;
       const params = new URLSearchParams({
         lamin: String(Math.max(-90, latN - box)),
@@ -32,6 +29,18 @@ export default async function handler(req, res) {
       });
       upstreamUrl += `?${params}`;
     }
+  }
+
+  // Handle preflight
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
+    });
   }
 
   try {
@@ -44,16 +53,38 @@ export default async function handler(req, res) {
     });
 
     if (!upstream.ok) {
-      return res.status(upstream.status).json({
-        error: `OpenSky returned ${upstream.status}`,
-      });
+      return new Response(
+        JSON.stringify({ error: `OpenSky returned ${upstream.status}` }),
+        {
+          status: 502,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
+      );
     }
 
-    const data = await upstream.json();
-    res.setHeader('Cache-Control', 'public, s-maxage=15, stale-while-revalidate=30');
-    return res.status(200).json(data);
+    const data = await upstream.text();
+
+    return new Response(data, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'public, s-maxage=15, stale-while-revalidate=30',
+      },
+    });
   } catch (err) {
-    console.error('[api/opensky] fetch error:', err.message);
-    return res.status(502).json({ error: 'Failed to fetch from OpenSky Network' });
+    return new Response(
+      JSON.stringify({ error: 'Failed to fetch from OpenSky Network', detail: err.message }),
+      {
+        status: 502,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    );
   }
 }
