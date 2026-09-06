@@ -1,10 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/api/opensky",
-      "destination": "https://opensky-network.org/api/states/all"
-    },
-    {
       "source": "/api/gdelt",
       "destination": "https://api.gdeltproject.org/api/v2/doc/doc"
     },
