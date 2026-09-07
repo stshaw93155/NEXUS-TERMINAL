@@ -15,6 +15,8 @@ import flightsModule from '../gods-eye/data/flights.js';
 import aisLiveVesselsModule from '../gods-eye/data/aisLiveVessels.js';
 import cctvModule from '../gods-eye/data/cctv.js';
 import trafficModule from '../gods-eye/data/traffic.js';
+import transportLayer from '../gods-eye/data/transportLayer.js';
+import { initGevVoiceCommands } from '../gods-eye/voice/gevOpenRouter.js';
 
 export function renderIntelligenceMap(container) {
   container.innerHTML = `
@@ -82,16 +84,29 @@ export function renderIntelligenceMap(container) {
   layerManager.register(aisLiveVesselsModule);
   layerManager.register(cctvModule);
   layerManager.register(trafficModule);
+  layerManager.register(transportLayer);
 
   layerManager.finalizeRegistrations([
     { id: 'flights', disposition: 'enabled+options' },
     { id: 'ais-live-vessels', disposition: 'enabled+options' },
     { id: 'cctv', disposition: 'enabled+options' },
-    { id: 'traffic', disposition: 'enabled+options' }
+    { id: 'traffic', disposition: 'enabled+options' },
+    { id: 'transport', disposition: 'enabled+options' }
   ]);
 
   // Install the Render Governor to handle continuous vs idle rendering for the layers
   installRenderGovernor(viewer);
+
+  // Initialize Voice AI Agent
+  try {
+    window.__gevVoiceCommands = initGevVoiceCommands({ 
+      viewer,
+      styleManager: {},
+      dataManager: layerManager 
+    });
+  } catch (err) {
+    console.error('Failed to init GEV Voice Commands:', err);
+  }
 
   store.subscribe((state, prev) => {
     // If the map view wasn't active but now is, we might need to trigger a resize/render

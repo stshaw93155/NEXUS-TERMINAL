@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    NEXUS TERMINAL - Components & Tactical Elements
    ========================================================================== */
 
@@ -776,4 +776,106 @@
 .palette-item:hover, .palette-item.selected {
   background: var(--cyan-dim);
   color: var(--cyan);
+}
+
+/* Voice Command Dock & GEV Voice Control Styles */
+#command-dock {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#gev-voice-control {
+  background: rgba(13, 17, 26, 0.9);
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+  width: 220px;
+}
+
+.gev-voice-heading {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.gev-voice-kicker {
+  font-weight: bold;
+  color: var(--cyan);
+}
+
+#gev-voice-status {
+  font-weight: bold;
+}
+
+#gev-voice-status[data-status="listening"] {
+  color: var(--red);
+  animation: pulse 1s infinite alternate;
+}
+
+#gev-voice-button {
+  background: transparent;
+  border: 1px solid var(--text-dim);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--cyan);
+  transition: all 0.2s;
+}
+
+#gev-voice-button:hover {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: var(--cyan);
+}
+
+.gev-mic-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  margin-top: 2px;
+}
+
+.gev-voice-visualizer {
+  display: flex;
+  gap: 2px;
+  height: 30px;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.gev-voice-visualizer span {
+  width: 4px;
+  height: var(--audio-level, 5px);
+  background: var(--cyan);
+  opacity: var(--audio-opacity, 0.5);
+  border-radius: 2px;
+  transition: height 0.05s ease;
+}
+
+.gev-voice-readout {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.gev-voice-error-tray {
+  display: none;
 }

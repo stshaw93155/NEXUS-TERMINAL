@@ -7,6 +7,7 @@ import { store } from '../state/store.js';
 import { playTacticalBlip, playKeystrokeSound } from '../utils/audio.js';
 import { formatUTCTime } from '../utils/formatters.js';
 import { GlobalCamProvider } from '../providers/GlobalCamProvider.js';
+import { forecastingEngine } from '../finance/index.js';
 
 export function renderGeminiAnalyst(container) {
   const state = store.getState();
@@ -309,13 +310,54 @@ export function renderGeminiAnalyst(container) {
       contextStr += "=== LATEST NEWS ===\n" + state.stories.slice(0, 5).map(s => `- ${s.title}`).join('\n') + "\n";
       contextStr += "=== MARKET TRENDS ===\n" + state.trending.map(t => `- ${t.term} ${t.sentiment} ${t.change}`).join('\n') + "\n";
 
-      const systemPrompt = `You are NEXUS GEMINI, a highly advanced global intelligence analyst terminal.
-You have access to live real-time context from the terminal dashboard.
+      // Check if user is asking about a stock symbol
+      let forecastContext = "";
+      const symbolMatch = query.match(/\b([A-Z]{2,5}(?:\.[A-Z]+)?)\b/);
+      if (symbolMatch) {
+         try {
+            const symbol = symbolMatch[1];
+            const forecast = await forecastingEngine.runForecastForSymbol(symbol);
+            if (forecast) {
+               forecastContext = `\n=== QUANTITATIVE FORECAST DATA FOR ${symbol} ===\nDirectional Bias: ${forecast.forecast}\nProbability UP: ${Math.round(forecast.probabilities.up * 100)}%\nProbability FLAT: ${Math.round(forecast.probabilities.flat * 100)}%\nProbability DOWN: ${Math.round(forecast.probabilities.down * 100)}%\nTechnical Evidence:\n- RSI: ${forecast.evidence.rsi}\n- MACD Hist: ${forecast.evidence.macdHistogram}\n- SMA50 Trend: ${forecast.evidence.trendSMA50}\n- SMA20 Distance: ${forecast.evidence.distanceSMA20}\nData Quality: HIGH\nTimestamp: ${forecast.timestamp}\n`;
+            }
+         } catch (e) {
+            // Not a tracked symbol or failed to forecast
+         }
+      }
+
+      const systemPrompt = `You are NEXUS Market Analyst, an analytical research assistant for a personal market-intelligence system.
+
+Your job is to analyze structured market data and explain probabilistic scenarios for future market movements.
+You may analyze individual securities and markets.
+You must distinguish analysis from certainty.
+You must never claim that a future price movement is guaranteed.
+You must not issue personalized investment instructions, execute trades, or tell the user to buy or sell.
+
+When asked about future market direction, analyze the supplied data and state which direction currently has a higher model probability and explain the evidence.
+Use probabilistic language such as:
+'current evidence favors'
+'model currently assigns a higher probability'
+'upward directional bias'
+'downward directional bias'
+'uncertain'
+'low confidence'
+
+Always provide supporting and opposing evidence.
+Never fabricate current prices, news, indicators, probabilities, earnings, market status, or technical levels.
+If required data is unavailable, explicitly state that the data is unavailable.
+Do not refuse merely because the question concerns future stock movement.
+This is an experimental market-research system.
+
+Include a concise research disclaimer with the analysis at the very end of the summary.
+
+CURRENT LIVE CONTEXT:
 ${contextStr}
+${forecastContext}
+
 Respond directly, concisely, and professionally to the user's query. Format your response strictly as a JSON object with the following schema:
 {
-  "summary": "Main conversational answer (use markdown if needed)",
-  "keyDevelopments": ["array of 2-3 key points, if applicable", "leave empty if just answering conversationally"],
+  "summary": "Main conversational answer (use markdown if needed). MUST end with the short research disclaimer.",
+  "keyDevelopments": ["array of 2-3 key points of evidence/risks", "leave empty if just answering conversationally"],
   "whyItMatters": "a short sentence on impact, or null",
   "confidence": "HIGH, MODERATE, or VERIFIED"
 }

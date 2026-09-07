@@ -114,6 +114,45 @@ export function renderEntityDetailsPanel(container) {
           </div>
         </div>
       `;
+    } else if (type === 'transport') {
+      const name = data.label || data.route || 'TRANSIT ENTITY';
+      const transitType = data.type || 'UNKNOWN';
+      const status = data.status || 'IN TRANSIT';
+      const speed = data.speedMps ? (data.speedMps * 3.6).toFixed(1) + ' km/h' : '---';
+      
+      // Parse metadata for display
+      let metadataHtml = '';
+      if (data.metadata) {
+        for (const [key, value] of Object.entries(data.metadata)) {
+          if (typeof value !== 'object' && value !== null && value !== '') {
+            metadataHtml += `<div><span style="color: var(--text-dim);">${key.toUpperCase()}:</span> ${value}</div>`;
+          }
+        }
+      }
+
+      content = `
+        <div class="panel-header" style="background: rgba(0,0,0,0.8); border: 1px solid var(--cyan); padding: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="panel-title" style="color: var(--cyan);">
+              <span class="material-symbols-outlined" style="font-size: 14px; margin-right: 4px;">directions_transit</span>
+              GLOBAL TRANSIT
+            </span>
+            <button id="close-entity-panel" style="background: transparent; border: none; color: var(--text-dim); cursor: pointer;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+            </button>
+          </div>
+          <div style="font-size: 14px; font-weight: bold; font-family: var(--font-mono); margin-bottom: 10px; color: #fff; line-height: 1.4;">
+            ${name}
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr; gap: 4px; font-family: var(--font-mono); font-size: 10px; color: var(--text-secondary); margin-bottom: 8px;">
+            <div><span style="color: var(--text-dim);">ID:</span> ${id}</div>
+            <div><span style="color: var(--text-dim);">TYPE:</span> ${transitType}</div>
+            <div><span style="color: var(--text-dim);">STATUS:</span> ${status}</div>
+            <div><span style="color: var(--text-dim);">SPEED:</span> ${speed}</div>
+          </div>
+          ${metadataHtml ? `<div style="display: grid; grid-template-columns: 1fr; gap: 4px; font-family: var(--font-mono); font-size: 9px; color: var(--text-secondary); border-top: 1px solid var(--border-subtle); padding-top: 8px;">${metadataHtml}</div>` : ''}
+        </div>
+      `;
     }
 
     panelContainer.innerHTML = content;

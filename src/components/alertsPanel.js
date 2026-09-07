@@ -34,6 +34,10 @@ export function renderAlertsPanel(container) {
         <span class="material-symbols-outlined" style="font-size: 14px; margin-right: 6px;">videocam</span>
         CCTV CAMS
       </button>
+      <button class="layer-toggle-btn panel-btn" data-layer-id="transport" style="justify-content: flex-start; padding: 6px 10px; font-size: 10px;">
+        <span class="material-symbols-outlined" style="font-size: 14px; margin-right: 6px;">directions_transit</span>
+        GLOBAL TRANSIT
+      </button>
     </div>
 
     <!-- Alerts Header -->
