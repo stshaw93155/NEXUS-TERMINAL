@@ -34,9 +34,9 @@ export async function renderCctvMatrixPanel(container) {
       <!-- Right side: Grid of all cameras -->
       <div style="flex: 1; display: flex; flex-direction: column; background: var(--bg-core);">
         <div style="padding: 10px; border-bottom: 1px solid var(--border-subtle);">
-          <span class="mono text-dim" style="font-size: 11px;">AVAILABLE LIVE FEEDS (${cameras.length})</span>
+          <span class="mono text-dim" style="font-size: 11px;">AVAILABLE LIVE FEEDS (\${cameras.length})</span>
         </div>
-        <div id="cctv-grid" style="flex: 1; overflow-y: auto; padding: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; align-content: flex-start;">
+        <div id="cctv-grid" style="flex: 1; overflow-y: auto; padding: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; align-content: flex-start;">
           ${cameras.map(cam => `
             <div class="cctv-grid-item" data-id="${cam.id}" data-name="${cam.name}" data-url="${cam.url}" style="position: relative; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border-subtle); cursor: pointer; transition: border-color var(--transition-fast); overflow: hidden;">
               <img src="${cam.url}" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.5;" onerror="this.style.display='none';" />

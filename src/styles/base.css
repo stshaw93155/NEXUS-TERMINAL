@@ -50,7 +50,7 @@
   --left-nav-width: 240px;
   --left-nav-collapsed-width: 56px;
   --right-alerts-width: 320px;
-  --terminal-dock-height: 250px;
+  --terminal-dock-height: 40vh;
   --terminal-dock-collapsed-height: 42px;
 
   /* Transitions */
